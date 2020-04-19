@@ -59,7 +59,7 @@
           <el-button
             size="mini"
             type="text"
-            @click="handleUse(scope.row.id,scope.row.driveId)"
+            @click="handleUse(scope.row.eid,scope.row.driveId)"
           >使用</el-button>
         </template>
       </el-table-column>
@@ -139,7 +139,7 @@ export default {
     },
     handleUse(id,driveId){
       if(driveId == 1){
-        this.$router.push({ path: "/carDrive" });
+        this.$router.push({ path: "/carDrive",query:{eId:id} });
       }
       console.log(id);
     },

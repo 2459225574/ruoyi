@@ -1,24 +1,3 @@
-<!--
-<template>
-  <el-table
-    :data="tableData"
-    :show-header="false"
-    border
-    height="100%"
-    class="tableBox"
-    style="width: 100%">
-    <template v-for="(column, index) in tableData[0]">
-      <el-table-column
-      v-bind:key = "index"
-      :property="index"
-      :label="index"
-      width="108px"
-      >
-    </el-table-column>
-    </template>
-  </el-table>
-</template>
--->
 <style lang="scss">
 .rootClass{
   width: 100%;
@@ -53,37 +32,49 @@
 <template>
   <div class="rootClass">
     <el-row class="rowHead"></el-row>
-    <el-row gutter="1" class="rowMain"> 
-      <el-col span="6" offset="8" class="colMain">
+    <el-row gutter=1 class="rowMain"> 
+      <el-col span=4 offset=10 class="colMain">
         <!-- 控制面板 -->
         <div class="mainControl">
           <el-row class="rowHead"></el-row>
           <el-row class="rowMain">
             <el-row class="menuStyle">
-              <el-col span="4" offset="10">
-                <button onclick="move(1)">前</button>
+              <el-col span=4 offset=4>
+                <button v-on:click="CarPower()"><i class="el-icon-switch-button"></i></button>
+              </el-col>
+              <el-col span=4 offset=8>
+                <button v-on:click="CarPause()"><i class="el-icon-video-pause"></i></button>
               </el-col>
             </el-row>
+            <el-row class="snip"></el-row>
+            <el-row class="snip"></el-row>
             <el-row class="menuStyle">
-              <el-col span="4" offset="6">
-                <button onclick="move(2)">左</button>
-              </el-col>
-              <el-col span="4" offset="4">
-                <button onclick="move(3)">右</button>
+              <el-col span=4 offset=10>
+                <button v-on:click="MoveForward()"><i class="el-icon-caret-top"></i></button>
               </el-col>
             </el-row>
+            <el-row class="snip"></el-row>
             <el-row class="menuStyle">
-              <el-col span="4" offset="10">
-                <button onclick="move(4)">后</button>
+              <el-col span=4 offset=4>
+                <button v-on:click="MoveLeft()"><i class="el-icon-caret-left"></i></button>
+              </el-col>
+              <el-col span=4 offset=8>
+                <button v-on:click="MoveRight()"><i class="el-icon-caret-right"></i></button>
+              </el-col>
+            </el-row>
+            <el-row class="snip"></el-row>
+            <el-row class="menuStyle">
+              <el-col span=4 offset=10>
+                <button v-on:click="MoveBack()"><i class="el-icon-caret-bottom"></i></button>
               </el-col>
             </el-row>
             <el-row class="snip"></el-row>
             <el-row>
-              <el-col span="5" offset="3">
-                <button>喇叭</button>
+              <el-col span=4 offset=4>
+                <button v-on:click="CarBell()"><i class="el-icon-bell"></i></button>
               </el-col>
-              <el-col span="5" offset="8">
-                <button>灯光</button>
+              <el-col span=4 offset=8>
+                <button v-on:click="CarLight()"><i class="el-icon-sunny"></i></button>
               </el-col>
             </el-row>
           </el-row>
@@ -95,6 +86,7 @@
   </div>
 </template>
 <script>
+import { CarOperation } from "@/api/iot/CarDrive";
   export default {
     name:  'CarDrive',
     data() {
@@ -109,7 +101,64 @@
       
     },
     methods: {
+      CarPower:function(){
+        CarOperation({"action":1,"eId":this.$route.query.eId}).then(response => {
+          console.log(response);
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+      CarPause:function(){
+        CarOperation({"action":1,"eId":this.$route.query.eId}).then(response => {
+          console.log(response);
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+      CarBell:function(){
+        CarOperation({"action":1,"eId":this.$route.query.eId}).then(response => {
+          console.log(response);
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+      CarLight:function(){
+        CarOperation({"action":1,"eId":this.$route.query.eId}).then(response => {
+          console.log(response);
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+      MoveForward:function(){
+        CarOperation({"action":2,"eId":this.$route.query.eId}).then(response => {
+          console.log(response);
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+      MoveLeft:function(){
+        CarOperation({"action":3,"eId":this.$route.query.eId}).then(response => {
+          console.log(response);
+        }).catch(err => {
+          console.log(err);
+        })
+      },
+      MoveRight:function(){
+        CarOperation({"action":4,"eId":this.$route.query.eId}).then(response => {
+          console.log(response);
+        }).catch(err => {
+          console.log(err);
+        })
+      },  
+      MoveBack:function(){
+        CarOperation({"action":5,"eId":this.$route.query.eId}).then(response => {
+          console.log(response);
+        }).catch(err => {
+          console.log(err);
+        })
+      },
       move:function(status){
+        let eId = this.$route.query.eId;
         
       }
     }

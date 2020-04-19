@@ -1,7 +1,9 @@
 <template>
   <section class="app-main">
     <transition name="fade-transform" mode="out-in">
+      <!-- 上面的关闭栏 -->
       <keep-alive :include="cachedViews">
+        <!-- 内容展示界面 -->
         <router-view :key="key" />
       </keep-alive>
     </transition>

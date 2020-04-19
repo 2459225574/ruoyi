@@ -84,32 +84,32 @@ export const constantRoutes = [
       }
     ]
   },
-  {
-    path: '/dict',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: 'type/data/:dictId(\\d+)',
-        component: () => import('@/views/system/dict/data'),
-        name: 'Data',
-        meta: { title: '字典数据', icon: '' }
-      }
-    ]
-  },
-  {
-    path: '/gen',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: 'edit',
-        component: () => import('@/views/tool/gen/editTable'),
-        name: 'GenEdit',
-        meta: { title: '修改生成配置' }
-      }
-    ]
-  }
+  // {
+  //   path: '/dict',
+  //   component: Layout,
+  //   hidden: true,
+  //   children: [
+  //     {
+  //       path: 'type/data/:dictId(\\d+)',
+  //       component: () => import('@/views/system/dict/data'),
+  //       name: 'Data',
+  //       meta: { title: '字典数据', icon: '' }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/gen',
+  //   component: Layout,
+  //   hidden: true,
+  //   children: [
+  //     {
+  //       path: 'edit',
+  //       component: () => import('@/views/tool/gen/editTable'),
+  //       name: 'GenEdit',
+  //       meta: { title: '修改生成配置' }
+  //     }
+  //   ]
+  // }
 ]
 
 export default new Router({

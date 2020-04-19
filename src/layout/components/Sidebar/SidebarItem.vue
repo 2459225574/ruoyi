@@ -25,6 +25,52 @@
 </template>
 
 <script>
+// {
+//   routes:[
+//       {
+//         children:[{path:"/redirect/:path*"}],
+//         hidden:true,
+//         path:"/redirect"
+//       },
+//       {
+//         hidden:true,
+//         path:"/carDrive"
+//       },
+//       {
+//         hidden:true,
+//         path:"/login"
+//       },
+//       {
+//         hidden:true,
+//         path:"/404"
+//       },
+//       {
+//         hidden:true,
+//         path:"/401"
+//       },
+//       {
+//         children:[{
+//           meta:{
+//             affix:true,
+//             icon:"dashboard",
+//             noCache:true,
+//             title:"首页"
+//           },
+//           name:"首页",
+//           path:"index"
+//         }],
+//         path:"",
+//         redirect:"index"
+//       },{
+//         children:[
+//           {}
+//         ],
+//         hidden:true,
+//         path:"/user",
+//         redirect:"noredirect"
+//       }
+//     ]
+// }
 import path from 'path'
 import { isExternal } from '@/utils/validate'
 import Item from './Item'

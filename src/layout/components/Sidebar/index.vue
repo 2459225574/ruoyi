@@ -25,13 +25,18 @@ import SidebarItem from './SidebarItem'
 import variables from '@/assets/styles/variables.scss'
 
 export default {
+  // data() {
+  //   return {
+  //     permission_routes:
+  //   }
+  // },
   components: { 
     SidebarItem, 
     Logo 
     },
   computed: {
     ...mapGetters([
-      'permission_routes',
+      // 'permission_routes',
       'sidebar'
     ]),
     activeMenu() {
@@ -43,6 +48,9 @@ export default {
       }
       return path
     },
+    permission_routes(){
+      return this.$store.state.menu.permission_routes;
+    },
     showLogo() {
       return this.$store.state.settings.sidebarLogo
     },
@@ -52,6 +60,9 @@ export default {
     isCollapse() {
       return !this.sidebar.opened
     }
+  },created(){
+    // console.log("&&&&&&&",this.$store.state.menu.permission_routes);
+    // setTimeout(()=>{console.log("888888888888",this.$store.state);},2000);
   }
 }
 </script>
