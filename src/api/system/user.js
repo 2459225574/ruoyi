@@ -10,6 +10,31 @@ export function listUser(query) {
   })
 }
 
+//查询陌生好友
+export function listFriends(query){
+  return request({
+    url: '/system/user/listFriends',
+    method: 'get',
+    params: query
+  })
+}
+
+//添加陌生朋友
+export function addFriends(query){
+  return request({
+    url: '/system/user/addFriends?userIds='+query,
+    method: 'get',
+  })
+}
+
+//删除朋友
+export function delFriends(query){
+  return request({
+    url: '/system/user/delFriends?ids='+query,
+    method: 'get',
+  })
+}
+
 // 查询用户详细
 export function getUser(userId) {
   return request({

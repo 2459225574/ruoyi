@@ -18,7 +18,7 @@ const menu = {
                     component:"system/role/index",
                     meta: {
                         icon:"peoples",
-                        title:"权限管理"
+                        title:"设备管理"
                     },
                     name:"Role",
                     path:"role"

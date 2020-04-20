@@ -46,7 +46,6 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['system:role:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -56,7 +55,6 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['system:role:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -66,40 +64,37 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['system:role:remove']"
         >删除</el-button>
       </el-col>
     </el-row>
 
     <el-table v-loading="loading" :data="roleList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="角色编号" prop="roleId" width="120" />
-      <el-table-column label="角色名称" prop="roleName" :show-overflow-tooltip="true" width="150" />
-      <el-table-column label="权限字符" prop="roleKey" :show-overflow-tooltip="true" width="150" />
+      <el-table-column label="序号" type="index" width="60" />
+      <el-table-column label="设备组名称" prop="roleName" :show-overflow-tooltip="true" width="160" />
+      <el-table-column label="设备权限字符" prop="roleKey" :show-overflow-tooltip="true" width="160" />
       <!-- <el-table-column label="显示顺序" prop="roleSort" width="100" /> -->
-      <el-table-column label="用户列表" align="center" width="100">
+      <el-table-column label="用户列表" align="center" width="180">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleUserList(scope.row)"
+          >详情</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label="设备列表" align="center" width="180">
         <template slot-scope="scope">
           <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:role:edit']"
           >详情</el-button>
         </template>
       </el-table-column>
-      <el-table-column label="设备列表" align="center" width="100">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:role:edit']"
-          >详情</el-button>
-        </template>
-      </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+      <el-table-column label="创建时间" align="center" prop="createTime" width="250">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
@@ -111,14 +106,12 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:role:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:role:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -152,36 +145,40 @@
     </el-dialog>
 
     <!-- 分配角色数据权限对话框 -->
-    <el-dialog :title="title" :visible.sync="openDataScope" width="500px">
-      <el-form :model="form" label-width="80px">
-        <el-form-item label="角色名称">
-          <el-input v-model="form.roleName" :disabled="true" />
-        </el-form-item>
-        <el-form-item label="权限字符">
-          <el-input v-model="form.roleKey" :disabled="true" />
-        </el-form-item>
-        <el-form-item label="权限范围">
-          <el-select v-model="form.dataScope">
-            <el-option
-              v-for="item in dataScopeOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="数据权限" v-show="form.dataScope == 2">
-          <el-tree
-            :data="deptOptions"
-            show-checkbox
-            default-expand-all
-            ref="dept"
-            node-key="id"
-            empty-text="加载中，请稍后"
-            :props="defaultProps"
-          ></el-tree>
-        </el-form-item>
-      </el-form>
+    <el-dialog :title="title" :visible.sync="openDataScope" width="1000px">
+      <el-table v-loading="loading" :data="userFriendsList" @selection-change="handleSelectionChangeFirends">
+          <el-table-column type="selection" width="50" align="center" />
+          <el-table-column label="序号" align="center" type="index" width="50" />
+          <el-table-column label="用户名称" align="center" prop="userName" :show-overflow-tooltip="true" width="120"/>
+          <el-table-column label="用户昵称" align="center" prop="nickName" :show-overflow-tooltip="true" width="120"/>
+          <el-table-column label="手机号码" align="center" prop="phonenumber" width="100" />
+          <el-table-column label="邮箱" align="center" prop="email" width="170" />
+          <el-table-column label="创建时间" align="center" prop="createTime" width="150">
+            <template slot-scope="scope">
+              <span>{{ parseTime(scope.row.createTime) }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="操作"
+            align="center"
+            class-name="small-padding fixed-width"
+          >
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                type="text"
+                @click="handleAddFriend(scope.row)"
+              >添加好友</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <pagination
+          v-show="totalFriends>0"
+          :total="totalFriends"
+          :page.sync="queryParams.pageNum"
+          :limit.sync="queryParams.pageSize"
+          @pagination="getList"
+        />
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitDataScope">确 定</el-button>
         <el-button @click="cancelDataScope">取 消</el-button>
@@ -194,6 +191,7 @@
 import { listRole, getRole, delRole, addRole, updateRole, exportRole, dataScope, changeRoleStatus } from "@/api/system/role";
 import { treeselect as menuTreeselect, roleMenuTreeselect } from "@/api/system/menu";
 import { treeselect as deptTreeselect, roleDeptTreeselect } from "@/api/system/dept";
+import { listUser, listFriends, delFriends, addFriends, getUser, delUser, addUser, updateUser, exportUser, resetUserPwd, changeUserStatus, importTemplate } from "@/api/system/user";
 
 export default {
   name: "Role",
@@ -245,7 +243,10 @@ export default {
         roleSort: [
           { required: true, message: "角色顺序不能为空", trigger: "blur" }
         ]
-      }
+      },
+      currentUser: undefined,
+      userFriendsList: undefined,
+      totalFriends:0,
     };
   },
   created() {
@@ -259,6 +260,15 @@ export default {
         response => {
           this.roleList = response.rows;
           this.total = response.total;
+          this.loading = false;
+        }
+      );
+    },
+    getUserList() {
+      this.loading = true;
+      listUser(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
+          this.userFriendsList = response.rows;
+          this.totalFriends = response.total;
           this.loading = false;
         }
       );
@@ -307,6 +317,13 @@ export default {
       this.ids = selection.map(item => item.roleId)
       this.single = selection.length!=1
       this.multiple = !selection.length
+    },
+    //用户详情
+    handleUserList(row){
+      this.openDataScope = true;
+      this.title = "设备组" + row.roleName + "的用户管理";
+      this.currentUser = row;
+      this.getUserList();
     },
     /** 新增按钮操作 */
     handleAdd() {

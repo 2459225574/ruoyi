@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
-      <h3 class="title">若依后台管理系统</h3>
+      <h3 class="title">物联网控制系统</h3>
       <el-form-item prop="username">
         <el-input v-model="loginForm.username" type="text" auto-complete="off" placeholder="账号">
           <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
@@ -32,7 +32,14 @@
           <img :src="codeUrl" @click="getCode" />
         </div>
       </el-form-item>
-      <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">记住密码</el-checkbox>
+      <el-row>
+        <el-col :span="21">
+          <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">记住密码</el-checkbox>
+        </el-col>
+        <el-col :span="3">
+          <a href="/register">注 册</a>
+        </el-col>
+      </el-row>
       <el-form-item style="width:100%;">
         <el-button
           :loading="loading"
@@ -150,6 +157,9 @@ export default {
   height: 100%;
   background-image: url("../assets/image/login-background.jpg");
   background-size: cover;
+}
+a{
+  color: DodgerBlue;
 }
 .title {
   margin: 0px auto 30px auto;
