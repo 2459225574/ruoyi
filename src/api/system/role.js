@@ -8,6 +8,21 @@ export function listRole(query) {
     params: query
   })
 }
+//把用户从设备组移除
+export function removeRoleMember(roleId,userId) {
+  return request({
+    url: '/system/role/removeRoleMember?roleId='+roleId+'&user_id='+userId,
+    method: 'get',
+  })
+}
+
+//添加用户到设备组
+export function addRoleMember(roleId,userId) {
+  return request({
+    url: '/system/role/addRoleMember?roleId='+roleId+'&user_id='+userId,
+    method: 'get',
+  })
+}
 
 // 查询角色详细
 export function getRole(roleId) {

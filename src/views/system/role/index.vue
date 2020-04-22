@@ -90,7 +90,7 @@
             size="mini"
             type="text"
             icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
+            @click="handleEquipment(scope.row)"
           >详情</el-button>
         </template>
       </el-table-column>
@@ -144,10 +144,67 @@
       </div>
     </el-dialog>
 
-    <!-- 分配角色数据权限对话框 -->
+    <!-- 用户详情对话框 -->
     <el-dialog :title="title" :visible.sync="openDataScope" width="1000px">
+      <el-form :model="queryFriendsParams" ref="queryForm" :inline="true" label-width="68px">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="用户昵称" prop="nickName">
+                <el-input 
+                v-model="queryFriendsParams.nickName" 
+                clearable
+                size="small"
+                style="width: 230px"
+                @keyup.enter.native="getUserList"
+                placeholder="请输入用户昵称" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="用户名称" prop="userName">
+                <el-input
+                  v-model="queryFriendsParams.userName"
+                  placeholder="请输入用户名称"
+                  clearable
+                  size="small"
+                  style="width: 230px"
+                  @keyup.enter.native="getUserList"
+                />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="手机号码" prop="phonenumber">
+                <el-input
+                  v-model="queryFriendsParams.phonenumber"
+                  placeholder="请输入手机号码"
+                  clearable
+                  size="small"
+                  style="width: 240px"
+                  @keyup.enter.native="getUserList"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+                <el-form-item label="邮箱" prop="status">
+                <el-input
+                  v-model="queryFriendsParams.email"
+                  placeholder="请输入邮箱"
+                  clearable
+                  size="small"
+                  style="width: 240px"
+                  @keyup.enter.native="getUserList"
+                />
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-search" size="mini" @click="getUserList">搜索</el-button>
+            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+          </el-form-item>
+        </el-form>
       <el-table v-loading="loading" :data="userFriendsList" @selection-change="handleSelectionChangeFirends">
-          <el-table-column type="selection" width="50" align="center" />
           <el-table-column label="序号" align="center" type="index" width="50" />
           <el-table-column label="用户名称" align="center" prop="userName" :show-overflow-tooltip="true" width="120"/>
           <el-table-column label="用户昵称" align="center" prop="nickName" :show-overflow-tooltip="true" width="120"/>
@@ -167,31 +224,120 @@
               <el-button
                 size="mini"
                 type="text"
-                @click="handleAddFriend(scope.row)"
-              >添加好友</el-button>
+                v-if="scope.row.status === '0'"
+                @click="handleAddRoleMember(scope.row)"
+              >加入设备组</el-button>
+              <el-button
+                size="mini"
+                type="text"
+                v-else
+                @click="handleRemoveRoleMember(scope.row)"
+              >移除设备组</el-button>
             </template>
           </el-table-column>
         </el-table>
         <pagination
           v-show="totalFriends>0"
           :total="totalFriends"
-          :page.sync="queryParams.pageNum"
-          :limit.sync="queryParams.pageSize"
-          @pagination="getList"
+          :page.sync="queryFriendsParams.pageNum"
+          :limit.sync="queryFriendsParams.pageSize"
+          @pagination="getUserList"
         />
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitDataScope">确 定</el-button>
+        <!-- <el-button type="primary" @click="submitDataScope">确 定</el-button> -->
         <el-button @click="cancelDataScope">取 消</el-button>
       </div>
+    </el-dialog>
+
+    <!-- 添加或修改设备对话框 -->
+    <el-dialog :title="title" :visible.sync="equipmentOpen" width="1000px">
+      <el-form :model="formEquipmentParams" ref="queryForm" :inline="true">
+      <el-form-item label="设备标识">
+        <el-input
+          v-model="formEquipmentParams.eId"
+          placeholder="请输入设备标识"
+          clearable
+          size="small"
+          style="width: 240px"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="设备名称">
+        <el-input
+          v-model="formEquipmentParams.name"
+          placeholder="请输入设备名称"
+          clearable
+          size="small"
+          style="width: 240px"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="创建时间">
+        <el-date-picker
+          v-model="equipmentDateRange"
+          size="small"
+          style="width: 240px"
+          value-format="yyyy-MM-dd"
+          type="daterange"
+          range-separator="-"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+        ></el-date-picker>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="getEquipmentList">搜索</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetEquipmentQuery">重置</el-button>
+      </el-form-item>
+    </el-form>
+
+    <el-table v-loading="loading" :data="EquipmentList">
+      <el-table-column label="设备编号" align="center" prop="id" width="80" />
+      <el-table-column label="设备标识" align="center" prop="eid" width="180" />
+      <el-table-column label="设备名称" align="center" prop="name" :show-overflow-tooltip="true" width="180" />
+      <el-table-column label="地理位置" align="center" prop="location" />
+      <el-table-column label="连接情况" align="center" prop="online">
+        <template slot-scope="scope">
+          <span v-if="scope.row.online">正常</span>
+          <span v-else>异常</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="创建时间" align="center" prop="time">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.time) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" align="center" prop="id" width="100">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            type="text"
+            v-if="scope.row.status === '0'"
+            @click="handleAddEquipment(scope.row)"
+          >添加设备</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            v-else
+            @click="handleRemoveEquipment(scope.row)"
+          >移除设备</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <pagination
+      v-show="equipmentTotal>0"
+      :total="equipmentTotal"
+      :page.sync="formEquipmentParams.pageNum"
+      :limit.sync="formEquipmentParams.pageSize"
+      @pagination="getEquipmentList"
+    />
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { listRole, getRole, delRole, addRole, updateRole, exportRole, dataScope, changeRoleStatus } from "@/api/system/role";
-import { treeselect as menuTreeselect, roleMenuTreeselect } from "@/api/system/menu";
-import { treeselect as deptTreeselect, roleDeptTreeselect } from "@/api/system/dept";
-import { listUser, listFriends, delFriends, addFriends, getUser, delUser, addUser, updateUser, exportUser, resetUserPwd, changeUserStatus, importTemplate } from "@/api/system/user";
+import { listRole, addRoleMember, removeRoleMember, getRole, delRole, addRole, updateRole, exportRole, dataScope, changeRoleStatus } from "@/api/system/role";
+import { listUser, listFriends, listRoleUser, delFriends, addFriends, getUser, delUser, addUser, updateUser, exportUser, resetUserPwd, changeUserStatus, importTemplate } from "@/api/system/user";
+import { listRoleEquipment, AddRoleEquipment, RemoveRoleEquipment } from "@/api/iot/home";
 
 export default {
   name: "Role",
@@ -207,6 +353,7 @@ export default {
       multiple: true,
       // 总条数
       total: 0,
+      equipmentTotal: 0,
       // 角色表格数据
       roleList: [],
       // 弹出层标题
@@ -217,6 +364,7 @@ export default {
       openDataScope: false,
       // 日期范围
       dateRange: [],
+      equipmentDateRange: [],
 
       // 查询参数
       queryParams: {
@@ -247,6 +395,41 @@ export default {
       currentUser: undefined,
       userFriendsList: undefined,
       totalFriends:0,
+      
+      // 查询好友参数
+      queryFriendsParams: {
+        pageNum: 1,
+        pageSize: 10,
+        userName: undefined,
+        phonenumber: undefined,
+        email: undefined,
+        nickName: undefined,
+        roleId:undefined,
+      },
+      equipmentOpen:false,
+      // 查设备友参数
+      queryEquipmentParams: {
+        pageNum: 1,
+        pageSize: 10,
+        userName: undefined,
+        phonenumber: undefined,
+        email: undefined,
+        nickName: undefined,
+        roleId:undefined,
+      },
+      EquipmentList:undefined,
+      formEquipmentParams:{
+        eId:undefined,
+        name:undefined,
+        pageNum: 1,
+        pageSize: 10,
+        roleId: undefined,
+      },
+      addAndRemoveParams: {
+        eId: undefined,
+        roleId: undefined
+      }
+      
     };
   },
   created() {
@@ -266,12 +449,73 @@ export default {
     },
     getUserList() {
       this.loading = true;
-      listUser(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
+      listRoleUser(this.queryFriendsParams).then(response => {
           this.userFriendsList = response.rows;
           this.totalFriends = response.total;
           this.loading = false;
         }
       );
+    },
+    getEquipmentList(){
+      this.loading = true;
+      listRoleEquipment(this.addDateRange(this.formEquipmentParams, this.equipmentDateRange)).then(response => {
+          this.EquipmentList = response.rows;
+          this.equipmentTotal = response.total;
+          this.loading = false;
+        }
+      );
+    },
+    handleEquipment(row){
+      this.equipmentOpen = true;
+      this.formEquipmentParams.roleId = row.roleId;
+      this.addAndRemoveParams.roleId = row.roleId;
+      this.title = row.roleName + "设备管理";
+      this.getEquipmentList();
+    },
+    handleAddEquipment(row){
+      this.addAndRemoveParams.eId = row.id;
+      AddRoleEquipment(this.addAndRemoveParams).then(response=>{
+        if (response.code === 200) {
+          this.msgSuccess("添加成功");
+          this.getEquipmentList();
+        } else {
+          this.msgError(response.msg);
+        }
+      })
+    },
+    handleRemoveEquipment(row){
+      this.addAndRemoveParams.eId = row.id;
+      RemoveRoleEquipment(this.addAndRemoveParams).then(response=>{
+        if (response.code === 200) {
+          this.msgSuccess("移除成功");
+          this.getEquipmentList();
+        } else {
+          this.msgError(response.msg);
+        }
+      })
+    },
+    //设备组添加成员
+    handleAddRoleMember(row){
+      addRoleMember(this.queryFriendsParams.roleId,row.userId).then(response=>{
+        if (response.code === 200) {
+          this.msgSuccess("修改成功");
+          this.getUserList();
+        } else {
+          this.msgError(response.msg);
+        }
+      })
+      
+    },
+    //移除设备组成员
+    handleRemoveRoleMember(row){
+      removeRoleMember(this.queryFriendsParams.roleId,row.userId).then(response=>{
+        if (response.code === 200) {
+          this.msgSuccess("修改成功");
+          this.getUserList();
+        } else {
+          this.msgError(response.msg);
+        }
+      })
     },
 
     // 取消按钮
@@ -301,10 +545,34 @@ export default {
       };
       this.resetForm("form");
     },
+    resetQuery(){
+      this.queryFriendsParams= {
+        pageNum: 1,
+        pageSize: 10,
+        userName: undefined,
+        phonenumber: undefined,
+        email: undefined,
+        nickName: undefined,
+        roleId:undefined,
+      }
+      this.resetForm("form");
+      this.getUserList();
+    },
+    resetEquipmentQuery(){
+      this.equipmentDateRange = [];
+      this.formEquipmentParams = {
+        eId:undefined,
+        name:undefined,
+        pageNum: 1,
+        pageSize: 10,
+        roleId: undefined,
+      };
+      this.getEquipmentList();
+    },
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
-      this.getList();
+      this.getUserList();
     },
     /** 重置按钮操作 */
     resetQuery() {
@@ -320,8 +588,9 @@ export default {
     },
     //用户详情
     handleUserList(row){
+      this.queryFriendsParams.roleId = row.roleId;
       this.openDataScope = true;
-      this.title = "设备组" + row.roleName + "的用户管理";
+      this.title = row.roleName + "的用户管理";
       this.currentUser = row;
       this.getUserList();
     },

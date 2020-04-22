@@ -40,11 +40,20 @@ const menu = {
                     component:"iot/equipment/home/index",
                     meta: {
                         icon:"chart",
-                        title:"智能家居"
+                        title:"智能设备"
                     },
                     name:"Home",
                     path:"home"
-                }
+                },
+                {
+                  component:"iot/equipment/use/index",
+                  meta: {
+                      icon:"phone",
+                      title:"使用设备"
+                  },
+                  name:"Equipment",
+                  path:"equipment"
+              }
               ],
               meta:{
                 icon:"textarea",
@@ -62,10 +71,39 @@ const menu = {
                 },
                 name: "Http://ruoyi.vip",
                 path: "http://ruoyi.vip"
+            },
+            {
+              hidden: true,
+              alwaysShow:true,
+              component: "Layout",
+              children:[
+                {
+                    component:"iot/drive/CarDrive",
+                    meta: {
+                        title:"小车"
+                    },
+                    name:"CarDrive",
+                    path:"carDrive"
+                },
+                {
+                  component:"iot/drive/test",
+                  meta: {
+                      title:"测试"
+                  },
+                  name:"Test",
+                  path:"test"
+                }
+              ],
+              meta:{
+                icon:"textarea",
+                title:"驱动"
+              },
+              name:"Driver",
+              path:"/driver",
+              redirect:"noRedirect"
             }
           ]
     }
-    
 }
 
 

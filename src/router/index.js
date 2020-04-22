@@ -37,11 +37,11 @@ export const constantRoutes = [
       }
     ]
   },
-  {
-    path: '/carDrive',
-    component: () => import('@/views/iot/drive/CarDrive'),
-    hidden: true
-  },
+  // {
+  //   path: '/carDrive',
+  //   component: () => import('@/views/iot/drive/CarDrive'),
+  //   hidden: true
+  // },
   {
     path: '/login',
     component: () => import('@/views/login'),

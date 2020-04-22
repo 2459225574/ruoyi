@@ -2,6 +2,7 @@
 .rootClass{
   width: 100%;
   height: 100%;
+  line-height: 100%;
   background: #dfecdf;
   text-align: center;
 }
@@ -102,14 +103,14 @@ import { CarOperation } from "@/api/iot/CarDrive";
     },
     methods: {
       CarPower:function(){
-        CarOperation({"action":1,"eId":this.$route.query.eId}).then(response => {
+        CarOperation({"action":7,"eId":this.$route.query.eId}).then(response => {
           console.log(response);
         }).catch(err => {
           console.log(err);
         })
       },
       CarPause:function(){
-        CarOperation({"action":1,"eId":this.$route.query.eId}).then(response => {
+        CarOperation({"action":8,"eId":this.$route.query.eId}).then(response => {
           console.log(response);
         }).catch(err => {
           console.log(err);
@@ -137,21 +138,21 @@ import { CarOperation } from "@/api/iot/CarDrive";
         })
       },
       MoveLeft:function(){
-        CarOperation({"action":3,"eId":this.$route.query.eId}).then(response => {
+        CarOperation({"action":4,"eId":this.$route.query.eId}).then(response => {
           console.log(response);
         }).catch(err => {
           console.log(err);
         })
       },
       MoveRight:function(){
-        CarOperation({"action":4,"eId":this.$route.query.eId}).then(response => {
+        CarOperation({"action":5,"eId":this.$route.query.eId}).then(response => {
           console.log(response);
         }).catch(err => {
           console.log(err);
         })
       },  
       MoveBack:function(){
-        CarOperation({"action":5,"eId":this.$route.query.eId}).then(response => {
+        CarOperation({"action":3,"eId":this.$route.query.eId}).then(response => {
           console.log(response);
         }).catch(err => {
           console.log(err);

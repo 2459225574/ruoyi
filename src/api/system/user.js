@@ -27,6 +27,15 @@ export function addFriends(query){
   })
 }
 
+//查询设备组成员信息
+export function listRoleUser(query) {
+  return request({
+    url: '/system/user/listRoleUser',
+    method: 'get',
+    params: query
+  })
+}
+
 //删除朋友
 export function delFriends(query){
   return request({
