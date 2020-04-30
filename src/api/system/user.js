@@ -10,6 +10,15 @@ export function listUser(query) {
   })
 }
 
+// 查询用户列表(管理员)
+export function listAllUser(query) {
+  return request({
+    url: '/system/user/listAllUser',
+    method: 'get',
+    params: query
+  })
+}
+
 //查询陌生好友
 export function listFriends(query){
   return request({
@@ -55,7 +64,7 @@ export function getUser(userId) {
 // 新增用户
 export function addUser(data) {
   return request({
-    url: '/system/user',
+    url: '/system/user/addUsr',
     method: 'post',
     data: data
   })

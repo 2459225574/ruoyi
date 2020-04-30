@@ -23,13 +23,14 @@ import { mapGetters } from 'vuex'
 import Logo from './Logo'
 import SidebarItem from './SidebarItem'
 import variables from '@/assets/styles/variables.scss'
+import { getInfo } from '@/api/login'
 
 export default {
-  // data() {
-  //   return {
-  //     permission_routes:
-  //   }
-  // },
+  data() {
+    return {
+      permission_routes:{}
+    }
+  },
   components: { 
     SidebarItem, 
     Logo 
@@ -48,9 +49,7 @@ export default {
       }
       return path
     },
-    permission_routes(){
-      return this.$store.state.menu.permission_routes;
-    },
+    
     showLogo() {
       return this.$store.state.settings.sidebarLogo
     },
@@ -61,8 +60,20 @@ export default {
       return !this.sidebar.opened
     }
   },created(){
-    // console.log("&&&&&&&",this.$store.state.menu.permission_routes);
-    // setTimeout(()=>{console.log("888888888888",this.$store.state);},2000);
+    this.get_permission_routes();
+  },
+  methods:{
+    get_permission_routes(){
+      getInfo().then((response => {
+        if(response.roles != undefined && response.roles[0] === "admin"){
+          this.permission_routes = this.$store.state.menu.permission_routes;
+        }else{
+          this.permission_routes = this.$store.state.menu.permission_user_routes;
+        }
+      })).catch(err=>{
+        this.permission_routes = this.$store.state.menu.permission_user_routes;
+      })
+    },
   }
 }
 </script>

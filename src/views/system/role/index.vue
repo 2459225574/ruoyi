@@ -128,11 +128,11 @@
     <!-- 添加或修改角色配置对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="角色名称" prop="roleName">
-          <el-input v-model="form.roleName" placeholder="请输入角色名称" />
+        <el-form-item label="设备组名" prop="roleName">
+          <el-input v-model="form.roleName" placeholder="请输入设备组名称" />
         </el-form-item>
         <el-form-item label="权限字符" prop="roleKey">
-          <el-input v-model="form.roleKey" placeholder="请输入权限字符" />
+          <el-input v-model="form.roleKey" placeholder="请输入设备组权限字符" />
         </el-form-item>
         <el-form-item label="备注">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
@@ -383,13 +383,10 @@ export default {
       // 表单校验
       rules: {
         roleName: [
-          { required: true, message: "角色名称不能为空", trigger: "blur" }
+          { required: true, message: "设备组名称不能为空", trigger: "blur" }
         ],
         roleKey: [
           { required: true, message: "权限字符不能为空", trigger: "blur" }
-        ],
-        roleSort: [
-          { required: true, message: "角色顺序不能为空", trigger: "blur" }
         ]
       },
       currentUser: undefined,
@@ -598,7 +595,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加角色";
+      this.title = "添加设备组";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {

@@ -6,7 +6,7 @@ function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
-const name = defaultSettings.title || '若依管理系统' // 标题
+const name = defaultSettings.title || '物联网控制系统' // 标题
 
 const port = process.env.port || process.env.npm_config_port || 80 // 端口
 
@@ -28,7 +28,7 @@ module.exports = {
   productionSourceMap: false,
   // webpack-dev-server 相关配置
   devServer: {
-    host: '0.0.0.0',
+    host: 'localhost:81',
     port: port,
     proxy: {
       // detail: https://cli.vuejs.org/config/#devserver-proxy

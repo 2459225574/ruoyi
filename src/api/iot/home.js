@@ -11,7 +11,6 @@ export function listEquipment(query) {
 
 // 查询用户所有可用设备列表
 export function listRoleEquipment(query) {
-  console.log(query)
   return request({
     url: '/iot/home/listRoleEquipment',
     method: 'get',
@@ -77,6 +76,15 @@ export function listAllEquipment(query) {
 export function listAllEquipmentNoRepeat(query) {
   return request({
     url: '/iot/home/listAllEquipmentNoRepeat',
+    method: 'get',
+    params: query
+  })
+}
+
+// 设备状态
+export function getEquipmentStatus(query) {
+  return request({
+    url: '/iot/home/getEquipmentStatus',
     method: 'get',
     params: query
   })

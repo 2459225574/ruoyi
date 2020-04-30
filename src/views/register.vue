@@ -1,7 +1,7 @@
 <template>
   <div class="login">
       <div class="login-form">
-        <el-form ref="form" :model="form" :rules="rules" >
+        <el-form ref="form" :model="form" :rules="loginRules" >
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="用户昵称" prop="nickName">
@@ -125,7 +125,6 @@ export default {
       this.$refs["form"].validate(valid => {
         new Promise((resolve, reject) => {
             addUser(this.form).then(response => {
-                console.log(response)
                 if (response.code === 200) {
                     this.msgSuccess("新增成功");
                     setTimeout(() => {

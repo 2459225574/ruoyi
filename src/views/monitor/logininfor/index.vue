@@ -21,22 +21,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="状态" prop="status">
-        <el-select
-          v-model="queryParams.status"
-          placeholder="登录状态"
-          clearable
-          size="small"
-          style="width: 240px"
-        >
-          <el-option
-            v-for="dict in statusOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
-          />
-        </el-select>
-      </el-form-item>
       <el-form-item label="登录时间">
         <el-date-picker
           v-model="dateRange"
@@ -94,7 +78,6 @@
       <el-table-column label="登录地点" align="center" prop="loginLocation" />
       <el-table-column label="浏览器" align="center" prop="browser" />
       <el-table-column label="操作系统" align="center" prop="os" />
-      <el-table-column label="登录状态" align="center" prop="status" :formatter="statusFormat" />
       <el-table-column label="操作信息" align="center" prop="msg" />
       <el-table-column label="登录日期" align="center" prop="loginTime" width="180">
         <template slot-scope="scope">
@@ -146,9 +129,6 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("sys_common_status").then(response => {
-      this.statusOptions = response.data;
-    });
   },
   methods: {
     /** 查询登录日志列表 */
